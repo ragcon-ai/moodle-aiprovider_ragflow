@@ -1,0 +1,326 @@
+.rfchat-fab {
+    position: fixed;
+    right: 1rem;
+    bottom: 5rem;
+    z-index: 1030;
+    border-radius: 2rem;
+    transition: right 0.2s ease;
+}
+
+/* When Moodle's right block drawer ("Blockleiste") is open it covers the page's right edge – shift the
+   floating button + drawer left by the drawer width, exactly like Moodle's own footer-popover button.
+   `--drawer-right-width` falls back to Boost's default (315px) when the theme does not expose it. */
+#page.show-drawer-right .rfchat-fab,
+#page.show-drawer-right .rfchat-drawer {
+    right: calc(var(--drawer-right-width, 315px) + 1rem);
+}
+
+.rfchat-drawer {
+    position: fixed;
+    right: 1rem;
+    bottom: 8rem;
+    z-index: 1031;
+    display: flex;
+    flex-direction: column;
+    width: 26rem;
+    min-width: 18rem;
+    max-width: calc(100vw - 2rem);
+    height: 30rem;
+    min-height: 16rem;
+    max-height: calc(100vh - 10rem);
+    background: var(--body-bg, #fff);
+    border: 1px solid var(--border-color, #dee2e6);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+    /* Let the user resize the window. direction:rtl moves the resize grip to the bottom-LEFT so the
+       window grows towards the page centre instead of off the right edge (children reset to ltr). */
+    resize: both;
+    /* Hidden (not auto) so the drawer itself never scrolls – only the messages area does – which keeps
+       the input and the Sources panel pinned and always visible at the bottom. */
+    overflow: hidden;
+    direction: rtl;
+}
+
+/* Header, input form and Sources panel keep their size; only the messages area flexes/scrolls. */
+.rfchat-header,
+.rfchat-form,
+.rfchat-sources {
+    flex: 0 0 auto;
+}
+
+.rfchat-header,
+.rfchat-messages,
+.rfchat-form,
+.rfchat-sources {
+    direction: ltr;
+}
+
+.rfchat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border-color, #dee2e6);
+    font-weight: bold;
+}
+
+/* Header title (e.g. "RAGflow Tutor"); pushes any controls + the close button to the right. */
+.rfchat-title {
+    margin-right: auto;
+}
+
+.rfchat-messages {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0.75rem;
+}
+
+.rfchat-msg {
+    margin-bottom: 0.5rem;
+    display: flex;
+}
+
+.rfchat-user {
+    justify-content: flex-end;
+}
+
+.rfchat-bubble {
+    max-width: 85%;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.5rem;
+    background: var(--light, #f1f3f5);
+    /* Wrap long words / URLs so answers never overflow the window. */
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.rfchat-user .rfchat-bubble {
+    background: var(--primary, #0f6cbf);
+    color: #fff;
+}
+
+.rfchat-error .rfchat-bubble {
+    background: var(--danger, #d9534f);
+    color: #fff;
+}
+
+/* Admin-only "Details" disclosure under an error message (empty for non-admins – gated server-side). */
+.rfchat-errordetails {
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+}
+
+.rfchat-errordetails > summary {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.rfchat-errordetails-body {
+    margin: 0.3rem 0 0;
+    padding: 0.4rem;
+    max-height: 10rem;
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 0.25rem;
+    color: #fff;
+}
+
+.rfchat-form {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-top: 1px solid var(--border-color, #dee2e6);
+}
+
+.rfchat-spinner {
+    display: inline-block;
+    width: 0.9rem;
+    height: 0.9rem;
+    margin-right: 0.4rem;
+    vertical-align: -0.1rem;
+    border: 2px solid var(--secondary, #6c757d);
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: rfchat-spin 0.7s linear infinite;
+}
+
+@keyframes rfchat-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Semantic-search widget (search block). */
+.rfsearch-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.rfsearch-results {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.rfsearch-result {
+    padding: 0.5rem 0.6rem;
+    border: 1px solid var(--border-color, #dee2e6);
+    border-radius: 0.4rem;
+}
+
+.rfsearch-head {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.rfsearch-title {
+    font-weight: bold;
+    overflow-wrap: anywhere;
+    flex: 1 1 auto;
+}
+
+.rfsearch-meta {
+    /* Positioning context for the hover excerpt so it spans the result row, not the tiny info
+       icon (a fixed-width tooltip anchored to the icon overflowed the window in a narrow block column). */
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+    font-size: 0.85em;
+    color: var(--secondary, #6c757d);
+}
+
+.rfsearch-icon {
+    flex: 0 0 auto;
+    align-self: center;
+    color: var(--secondary, #6c757d);
+}
+
+.rfsearch-info {
+    flex: 0 0 auto;
+    color: var(--secondary, #6c757d);
+    cursor: default;
+}
+
+.rfsearch-info:hover {
+    color: var(--primary, #0f6cbf);
+}
+
+.rfsearch-excerpt {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    z-index: 20;
+    width: max-content;
+    max-width: 100%;
+    margin-bottom: 0.25rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.3rem;
+    background: var(--dark, #343a40);
+    color: #fff;
+    font-size: 0.9em;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.rfsearch-info:hover .rfsearch-excerpt {
+    display: block;
+}
+
+/* Page mode: an in-page panel (Helpdesk page) instead of the floating drawer. */
+.rfchat-page {
+    position: static;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: 44rem;
+    height: 32rem;
+    max-height: 70vh;
+    margin: 1rem auto;
+    resize: vertical;
+}
+
+/* Long-term memory controls (Helpdesk): new / new-private conversation + delete-memories link. */
+.rfchat-header .rfchat-newconv {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    font-weight: normal;
+}
+
+.rfchat-header .rfchat-newconv .btn {
+    padding: 0;
+}
+
+.rfchat-header .rfchat-close-btn {
+    margin-left: auto;
+}
+
+/* No focus box/outline on the help icons and link-buttons when clicked/active. */
+.rfchat-drawer .btn-link:focus,
+.rfchat-drawer .btn-link:active,
+.rfchat-drawer .btn-link.active,
+.rfchat-drawer .rfchat-newconv [data-bs-toggle="popover"]:focus,
+.rfchat-drawer .rfchat-newconv [data-bs-toggle="popover"]:active {
+    outline: none;
+    box-shadow: none;
+}
+
+.rfchat-forgetbar {
+    padding: 0.25rem 0.75rem 0.5rem;
+    text-align: center;
+    font-size: 0.85em;
+}
+
+.rfchat-forgetbar .rfchat-forget {
+    padding: 0;
+    color: var(--secondary, #6c757d);
+}
+
+/* Persistent "Sources" panel under the chat input: grows as documents are cited, scrollable past ~5. */
+.rfchat-sources {
+    border-top: 1px solid var(--border-color, #dee2e6);
+    padding: 0.4rem 0.6rem 0.5rem;
+}
+
+.rfchat-sources-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.rfchat-sources-list {
+    margin: 0;
+    padding: 0;
+    max-height: 8rem;
+    overflow-y: auto;
+}
+
+/* One group per answer, newest on top; a stable light/dark zebra so the files of one answer read as a set. */
+.rfchat-source-group {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem 0.4rem;
+    border-radius: 0.25rem;
+}
+
+.rfchat-source-group--alt {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.rfchat-source-group li {
+    font-size: 0.82rem;
+    line-height: 1.3;
+    padding: 0.1rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

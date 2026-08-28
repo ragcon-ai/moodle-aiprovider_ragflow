@@ -1,0 +1,69 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template aiprovider_ragflow/searchresult
+
+    One RAGflow search result.
+
+    Context variables required for this template:
+    * name string Document name
+    * icon string Font Awesome class for the document file-type icon (e.g. fa-file-pdf)
+    * snippet string Matching text excerpt (shown on hover via the info icon, not inline)
+    * hassnippet bool Whether a snippet excerpt is present
+    * similaritypct int Match score as a percentage (0-100)
+    * url string Optional direct link to the source document
+    * hasurl bool Whether url is present
+    * dataset string RAGflow dataset id (proxy documents, on-click download)
+    * document string RAGflow document id (proxy documents, on-click download)
+    * hasdoc bool Whether dataset+document are present (proxy download)
+
+    Example context (json):
+    {
+        "name": "Kurs erstellen.md",
+        "icon": "fa-file-lines",
+        "snippet": "So legen Sie einen Kurs an …",
+        "hassnippet": true,
+        "similaritypct": 69,
+        "url": "",
+        "hasurl": false,
+        "dataset": "abc123",
+        "document": "def456",
+        "hasdoc": true
+    }
+}}
+<div class="rfsearch-result">
+    <div class="rfsearch-head">
+        <i class="rfsearch-icon fa {{icon}}" aria-hidden="true"></i>
+        {{#hasdoc}}
+        <a href="#" class="rfsearch-title" data-download="1" data-dataset="{{dataset}}" data-document="{{document}}">{{name}}</a>
+        {{/hasdoc}}
+        {{^hasdoc}}
+        {{#hasurl}}
+        <a href="{{url}}" target="_blank" rel="noopener noreferrer" class="rfsearch-title">{{name}}</a>
+        {{/hasurl}}
+        {{^hasurl}}
+        <span class="rfsearch-title">{{name}}</span>
+        {{/hasurl}}
+        {{/hasdoc}}
+    </div>
+    <div class="rfsearch-meta">
+        <span class="rfsearch-score">{{#str}} searchscore, aiprovider_ragflow {{/str}} {{similaritypct}}&nbsp;%</span>
+        {{#hassnippet}}
+        <span class="rfsearch-info" aria-label="{{#str}} searchexcerpt, aiprovider_ragflow {{/str}}"><i class="fa fa-info-circle" aria-hidden="true"></i><span class="rfsearch-excerpt" role="tooltip">{{snippet}}</span></span>
+        {{/hassnippet}}
+    </div>
+</div>

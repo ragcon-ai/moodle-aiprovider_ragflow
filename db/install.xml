@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="ai/provider/ragflow/db" VERSION="20260819" COMMENT="Install tables for aiprovider_ragflow."
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd">
+  <TABLES>
+    <TABLE NAME="aiprovider_ragflow_session" COMMENT="Maps a Moodle user + conversation scope to a persistent RAGflow chat session (memory).">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Owning Moodle user."/>
+        <FIELD NAME="providerid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ai_providers.id of the RAGflow provider instance."/>
+        <FIELD NAME="chatid" TYPE="char" LENGTH="128" NOTNULL="true" SEQUENCE="false" COMMENT="RAGflow chat assistant id."/>
+        <FIELD NAME="scopekey" TYPE="char" LENGTH="64" NOTNULL="true" SEQUENCE="false" COMMENT="Conversation scope key (e.g. helpdesk); empty string = global scope."/>
+        <FIELD NAME="sessionid" TYPE="char" LENGTH="128" NOTNULL="true" SEQUENCE="false" COMMENT="RAGflow session id."/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userprovchatscope" UNIQUE="true" FIELDS="userid, providerid, chatid, scopekey"/>
+        <INDEX NAME="timemodified" UNIQUE="false" FIELDS="timemodified"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

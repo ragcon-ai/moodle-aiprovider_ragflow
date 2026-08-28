@@ -1,0 +1,7 @@
+# Keep AI/dev context in the repo but out of distributed release archives (`git archive`),
+# e.g. plugin ZIPs built for the Moodle plugin directory. Has no effect on normal git use.
+AGENTS.md        export-ignore
+CHANGELOG.dev.md export-ignore
+CLAUDE.md        export-ignore
+.gitattributes   export-ignore
+.github          export-ignore
