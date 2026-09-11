@@ -80,6 +80,11 @@ Professional support and web hosting for RAGflow + Moodle are available from **R
 
 ## Changelog ##
 
+### 0.7.1 ###
+
+* **Fix: long-term memory recall.** Facts the assistant had remembered about a user were not being recalled in later conversations. This is fixed — remembered information is reliably retrieved and used again.
+* **Maintenance.** Internal housekeeping (cache-definition labels for the admin caching page; test-documentation version marker). No API change.
+
 ### 0.7.0 ###
 
 * **First public release (beta).** The shared RAGflow backend for Moodle's core AI subsystem: grounded,

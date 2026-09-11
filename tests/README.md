@@ -1,6 +1,6 @@
 # Tests – aiprovider_ragflow
 
-**Plugin version:** `2026082403` (release `0.6.11`) — update this line whenever the tests or the plugin
+**Plugin version:** `2026090200` (release `0.7.1`) — update this line whenever the tests or the plugin
 version change.
 
 PHPUnit tests for this plugin. They run automatically in the bundled **moodle-plugin-ci** GitHub Actions

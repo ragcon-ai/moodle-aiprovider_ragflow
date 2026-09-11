@@ -1486,16 +1486,20 @@ class helper {
         if ($baseurl === '' || $apikey === '' || trim($memoryid) === '' || trim($sessionid) === '' || trim($query) === '') {
             return [];
         }
-        $qs = http_build_query([
-            'query' => $query,
-            'memory_id' => $memoryid,
-            'session_id' => $sessionid,
-            'top_n' => $topn,
-            'similarity_threshold' => 0.2,
-        ]);
         try {
-            $response = \core\di::get(http_client::class)->request('GET', $baseurl . '/api/v1/messages/search?' . $qs, [
+            // Pass the parameters via Guzzle's QUERY option, NOT via http_build_query() in the URL: Moodle
+            // sets arg_separator.output to "&amp;", so http_build_query() joins params with "&amp;" and
+            // RAGflow reads memory_id/session_id/... as "amp;memory_id"/... — the search then silently
+            // returns no results (long-term memory recall never fires).
+            $response = \core\di::get(http_client::class)->request('GET', $baseurl . '/api/v1/messages/search', [
                 'headers' => ['Authorization' => 'Bearer ' . $apikey],
+                RequestOptions::QUERY => [
+                    'query' => $query,
+                    'memory_id' => $memoryid,
+                    'session_id' => $sessionid,
+                    'top_n' => $topn,
+                    'similarity_threshold' => 0.2,
+                ],
                 'timeout' => 15,
                 RequestOptions::HTTP_ERRORS => false,
             ]);
@@ -1581,13 +1585,15 @@ class helper {
         string $memoryid,
         string $sessionid
     ): array {
-        $qs = http_build_query(['memory_id' => $memoryid, 'session_id' => $sessionid, 'limit' => 100]);
         try {
             $resp = \core\di::get(http_client::class)->request(
                 'GET',
-                $baseurl . '/api/v1/messages?' . $qs,
+                $baseurl . '/api/v1/messages',
                 [
                     'headers' => ['Authorization' => 'Bearer ' . $apikey],
+                    // Query via Guzzle's QUERY option, not http_build_query() — Moodle's "&amp;" separator
+                    // would corrupt the params (see memory_search()).
+                    RequestOptions::QUERY => ['memory_id' => $memoryid, 'session_id' => $sessionid, 'limit' => 100],
                     'timeout' => 15,
                     RequestOptions::HTTP_ERRORS => false,
                 ]
